@@ -7,7 +7,7 @@ public class PlayerControl : MonoBehaviour {
 	Rigidbody2D bBody;
 	public float moveforce = 5;
 	public float jumpPower = 550;
-	private bool jumping;  
+	public bool jumping;  
 	bool IsGrounded = true;
 	public float jumpDelay = 3.0f;
 
@@ -23,30 +23,33 @@ public class PlayerControl : MonoBehaviour {
 		bBody.AddForce (movevec);     //adds that force to rigidbody2D
 		if (CrossPlatformInputManager.GetButtonUp ("JUMP")) { //if jump button is active fot this update do...
 			jump ();
-
 		}
-		if (bBody.velocity.y < -1.0) {
-			IsGrounded = false; 
+			if (bBody.velocity.y < -0.0) {   //check to see if player is falling
+				IsGrounded = false;
+				jumping = true;
 
-		} else {
-			if(jumpDelay >= 0 ){
-				jumpDelay -= Time.deltaTime;
-				return;
-			}else{
-			IsGrounded = true; 
+
+			} else {                      //jump delay unimplemented right now
+				if (jumpDelay >= 0) {
+					jumpDelay -= Time.deltaTime;
+					return;
+				} else {
+					IsGrounded = true; 
+					jumping = false;
+				}
 			}
+		if (bBody.velocity.y > 0) {   //check to see if player is going up
+			jumping = true; 
+		
 		}
-
-
-
 	}
 
 
 	void jump(){
 
-		if (IsGrounded == true) {
-			gameObject.GetComponent<Rigidbody2D> ().velocity = new Vector2 (0, jumpPower);
-			Debug.Log ("Jump");
+		if (IsGrounded == true & jumping == false) {               //make sure the player is both not going up or down 
+			gameObject.GetComponent<Rigidbody2D> ().velocity = new Vector2 (0, jumpPower);   //adds force of jump power to rigid body
+			Debug.Log ("Jump"); //print to log so I know its working cause I most likely wrote it wrong 
 		}
 
 	}
