@@ -11,7 +11,6 @@ public class PlayerControl : MonoBehaviour {
 	public float jumpPower = 550;
 	public bool jumping;  
 	bool IsGrounded = true;
-	public float jumpDelay = 3.0f;
 	private float InVertedJumpLimt = -0.1f; 
 	private float jumpcache = 0.1f;
 
@@ -21,8 +20,8 @@ public class PlayerControl : MonoBehaviour {
 		bBody = this.GetComponent<Rigidbody2D> ();  //finds the rigidbody of connected object
 		jumping = false;   //player is not jumping at start 
 
-		jumpcache = minimum_jump_limt * 2;
-		InVertedJumpLimt = minimum_jump_limt - jumpcache;
+		jumpcache = minimum_jump_limt * 2; 
+		InVertedJumpLimt = minimum_jump_limt - jumpcache;  // finds the negative inversion of the jump limt 
 
 		
 	}
@@ -30,26 +29,18 @@ public class PlayerControl : MonoBehaviour {
 	
 		Vector2 movevec = new Vector2(CrossPlatformInputManager.GetAxis("Horizontal"),CrossPlatformInputManager.GetAxis("Vertical")) * moveforce;  //adds force based on input from the UI joystick
 		bBody.AddForce (movevec);     //adds that force to rigidbody2D
+
 		if (CrossPlatformInputManager.GetButtonUp ("JUMP")) { //if jump button is active fot this update do...
 			jump ();
 		}
-		if (bBody.velocity.y < InVertedJumpLimt) {   //check to see if player is falling
+
+	
+		if (bBody.velocity.y < InVertedJumpLimt) {   //check to see if player is falling faster than jump limt 
 				IsGrounded = false;
 				jumping = true;
-
-
-			} else {                      //jump delay unimplemented right now
-				if (jumpDelay >= 0) {
-					jumpDelay -= Time.deltaTime;
-					return;
-				} else {
-					IsGrounded = true; 
-					jumping = false;
-				}
 			}
-		if (bBody.velocity.y > minimum_jump_limt) {   //check to see if player is going up
+		if (bBody.velocity.y > minimum_jump_limt) {   //check to see if player is going up faster than jump limt 
 			jumping = true; 
-		
 		}
 	}
 
