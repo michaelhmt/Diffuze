@@ -24,7 +24,7 @@ public class PlayerControl : MonoBehaviour {
 		if (CrossPlatformInputManager.GetButtonUp ("JUMP")) { //if jump button is active fot this update do...
 			jump ();
 		}
-			if (bBody.velocity.y < -0.0) {   //check to see if player is falling
+			if (bBody.velocity.y < -0.1) {   //check to see if player is falling
 				IsGrounded = false;
 				jumping = true;
 
@@ -38,7 +38,7 @@ public class PlayerControl : MonoBehaviour {
 					jumping = false;
 				}
 			}
-		if (bBody.velocity.y > 0) {   //check to see if player is going up
+		if (bBody.velocity.y > 0.1) {   //check to see if player is going up
 			jumping = true; 
 		
 		}
