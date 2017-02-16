@@ -18,6 +18,10 @@ public class PlayerControl : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+
+
+
+
 		bBody = this.GetComponent<Rigidbody2D> ();  //finds the rigidbody of connected object
 		jumping = false;   //player is not jumping at start 
 
@@ -28,30 +32,40 @@ public class PlayerControl : MonoBehaviour {
 	}
 	void FixedUpdate () {
 	
-		Vector2 movevec = new Vector2(CrossPlatformInputManager.GetAxis("Horizontal"),CrossPlatformInputManager.GetAxis("Vertical")) * moveforce;  //adds force based on input from the UI joystick
+		Vector2 movevec = new Vector2 (CrossPlatformInputManager.GetAxis ("Horizontal"), CrossPlatformInputManager.GetAxis ("Vertical")) * moveforce;  //adds force based on input from the UI joystick
 		bBody.AddForce (movevec);     //adds that force to rigidbody2D
+
+
+
+		if (Application.platform == RuntimePlatform.WebGLPlayer) {   // if platform is webGL press space will jump
+			if (Input.GetKeyDown ("space"))
+				jump ();
+		}
+
+
 		if (CrossPlatformInputManager.GetButtonUp ("JUMP")) { //if jump button is active fot this update do...
 			jump ();
 		}
 		if (bBody.velocity.y < InVertedJumpLimt) {   //check to see if player is falling
-				IsGrounded = false;
-				jumping = true;
+			IsGrounded = false;
+			jumping = true;
 
 
-			} else {                      //jump delay unimplemented right now
-				if (jumpDelay >= 0) {
-					jumpDelay -= Time.deltaTime;
-					return;
-				} else {
-					IsGrounded = true; 
-					jumping = false;
-				}
+		} else {                      //jump delay unimplemented right now
+			if (jumpDelay >= 0) {
+				jumpDelay -= Time.deltaTime;
+				return;
+			} else {
+				IsGrounded = true; 
+				jumping = false;
 			}
+		}
 		if (bBody.velocity.y > minimum_jump_limt) {   //check to see if player is going up
 			jumping = true; 
 		
 		}
 	}
+
 
 
 	void jump(){
@@ -63,6 +77,6 @@ public class PlayerControl : MonoBehaviour {
 
 	}
 
-
-
 }
+
+
